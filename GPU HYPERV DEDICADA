@@ -1,0 +1,22 @@
+## COMANDO PARA DEDICAR PLACA DE VÍDEO NA VM ###
+
+$VM='INLAB-SRV210'
+Set-VM $VM -GuestControlledCacheTypes $true
+$Location = 'PCIROOT(36)#PCI(0000)#PCI(0000)'
+Set-VM $VM -LowMemoryMappedIoSpace 512MB 
+Set-VM $VM -HighMemoryMappedIoSpace 12GB
+Dismount-VMHostAssignableDevice -force -LocationPath $Location
+Add-VMAssignableDevice -LocationPath $Location -VMName INLAB-SRV210
+
+
+
+#REMOVER ASSOCIAÇÃO#
+Remove-VMAssignableDevice -LocationPath "PCIROOT(36)#PCI(0000)#PCI(0000)" -VMName "INLAB-SRV210"
+Mount-VMHostAssignableDevice -LocationPath "PCIROOT(36)#PCI(0000)#PCI(0000)"
+
+
+
+#PULO DO GATO#
+Na configuração da VM precisa configurar o Automatica Stop Action deve estar setado "Turn Off the virtual machine" 
+
+
