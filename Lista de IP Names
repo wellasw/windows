@@ -1,0 +1,21 @@
+$ipAddresses = get-content "C:\Support\IPlist.txt"
+$results = @()
+
+foreach ($ipAddress in $ipAddresses) {
+    try {
+        $hostname = [System.Net.Dns]::GetHostByAddress($ipAddress).Hostname
+        $result = [PSCustomObject]@{
+            IP = $ipAddress
+            Hostname = $hostname
+        }
+        $results += $result
+    } catch {
+        $result = [PSCustomObject]@{
+            IP = $ipAddress
+            Hostname = "Não Encontrado"
+        }
+        $results += $result
+    }
+}
+
+$results | Export-Csv -Path "C:\Support\names.csv" -NoTypeInformation
